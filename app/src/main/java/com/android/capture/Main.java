@@ -1,5 +1,6 @@
 package com.android.capture;
 
+import com.android.capture.hooks.SinaHot;
 import com.android.capture.hooks.WeiBo;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -29,11 +30,18 @@ public class Main implements IXposedHookLoadPackage ,IXposedHookZygoteInit
 //            KuaiBaoApp.init(lpparam);
 //        }
 
-
+//
+//        if (lpparam.packageName.equals(WeiBo.PACKAGE_NAME))
+//        {
+//            log(WeiBo.PACKAGE_NAME+" Hooked");
+//            WeiBo.init(lpparam);
+////            JiKeTest.init(lpparam);
+//
+//        }
         if (lpparam.packageName.equals(WeiBo.PACKAGE_NAME))
         {
             log(WeiBo.PACKAGE_NAME+" Hooked");
-            WeiBo.init(lpparam);
+            SinaHot.init(lpparam);
 //            JiKeTest.init(lpparam);
 
         }
