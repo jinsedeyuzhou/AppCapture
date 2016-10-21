@@ -1,7 +1,6 @@
 package com.android.capture;
 
 import com.android.capture.hooks.SinaHot;
-import com.android.capture.hooks.WeiBo;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -13,8 +12,7 @@ import static de.robv.android.xposed.XposedBridge.log;
 /**
  * Created by Berkeley on 8/24/16.
  */
-public class Main implements IXposedHookLoadPackage ,IXposedHookZygoteInit
-{
+public class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
         log("ML: Loaded Main class");
@@ -38,14 +36,20 @@ public class Main implements IXposedHookLoadPackage ,IXposedHookZygoteInit
 ////            JiKeTest.init(lpparam);
 //
 //        }
-        if (lpparam.packageName.equals(WeiBo.PACKAGE_NAME))
+//        if (lpparam.packageName.equals(SinaComments.PACKAGE_NAME)) {
+//            log(SinaComments.PACKAGE_NAME + " Hooked");
+//            SinaComments.init(lpparam);
+////            JiKeTest.init(lpparam);
+//
+//        }
+        if (lpparam.packageName.equals(SinaHot.PACKAGE_NAME))
         {
-            log(WeiBo.PACKAGE_NAME+" Hooked");
+            log(SinaHot.PACKAGE_NAME+" Hooked");
             SinaHot.init(lpparam);
 //            JiKeTest.init(lpparam);
 
         }
-//
+
 //        if (lpparam.packageName.equals(JiKe.PACKAGE_NAME))
 //        {
 //            log(JiKe.PACKAGE_NAME+" Hooked");
@@ -54,9 +58,7 @@ public class Main implements IXposedHookLoadPackage ,IXposedHookZygoteInit
 //        }
 
 
-
     }
-
 
 
 }

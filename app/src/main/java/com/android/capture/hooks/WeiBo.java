@@ -26,6 +26,7 @@ public class WeiBo {
     //    RequestQueue mQueue;
 
 
+
     public static void init(final XC_LoadPackage.LoadPackageParam lPParam) {
         if (!lPParam.packageName.equals(PACKAGE_NAME))
             return;
@@ -60,7 +61,7 @@ public class WeiBo {
                 super.afterHookedMethod(param);
                 log("com.sina.weibo.page.DiscoverActivity::::::::::::DiscoverActivity");
 
-                findAndHookMethod("com.sina.weibo.stream.b.d", lpparam.classLoader, "a",List.class, new XC_MethodHook() {
+                findAndHookMethod("com.sina.weibo.stream.b.d", lpparam.classLoader, "a", List.class, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         super.afterHookedMethod(param);
@@ -87,6 +88,7 @@ public class WeiBo {
                         final Class MblogTopicClass = XposedHelpers.findClass("com.sina.weibo.models.MblogTopic", lpparam.classLoader);
                         final Class MBlogMultiMediaClass = XposedHelpers.findClass("com.sina.weibo.models.MBlogMultiMedia", lpparam.classLoader);
 //                        final Class MBlogTitleInfoClass = XposedHelpers.findClass("com.sina.weibo.models.MBlogTitleInfo", lpparam.classLoader);
+                        final Class MediaDataObjectClass = XposedHelpers.findClass("com.sina.weibo.card.model.MediaDataObject", lpparam.classLoader);
 
                         final List listMessage = (List) param.args[0];
 //                        final List listMessage = (List) param.getResult();
@@ -98,6 +100,7 @@ public class WeiBo {
 
 
                         for (int i = 0; i < listMessage.size(); i++) {
+
 
                             //信息来源，手机weibo,还是其他平台
                             Method getAnnotations = StatusClass.getMethod("getAnnotations");
@@ -347,6 +350,22 @@ public class WeiBo {
                             Method getMblogMenus = StatusClass.getMethod("getMblogMenus");
                             List mblogMenus = (List) getMblogMenus.invoke(listMessage.get(i), new Object[]{});
                             log("getMblogMenus:::::::::" + mblogMenus);
+                            if (null != mblogMenus) {
+                                for (int j = 0; j < mblogMenus.size(); j++) {
+                                    Method getAfterDownLoadName = JsonButtonClass.getMethod("getAfterDownLoadName");
+                                    String afterDownLoadName = (String) getAfterDownLoadName.invoke(mblogMenus.get(j), new Object[]{});
+                                    log("getAfterDownLoadName:::::::::" + afterDownLoadName);
+
+                                    Method getMonitorUrl = JsonButtonClass.getMethod("getMonitorUrl");
+                                    String monitorUrl = (String) getMonitorUrl.invoke(mblogMenus.get(j), new Object[]{});
+                                    log("getMonitorUrl:::::::::" + monitorUrl);
+
+
+                                    Method getFollow_res_pic = JsonButtonClass.getMethod("getFollow_res_pic");
+                                    String follow_res_pic = (String) getFollow_res_pic.invoke(mblogMenus.get(j), new Object[]{});
+                                    log("getFollow_res_pic:::::::::" + follow_res_pic);
+                                }
+                            }
 
                             Method getSummaryType = StatusClass.getMethod("getSummaryType");
                             int summaryType = (int) getSummaryType.invoke(listMessage.get(i), new Object[]{});
@@ -376,6 +395,20 @@ public class WeiBo {
                                 Method getPeople_desc = MblogCardInfoClass.getMethod("getPeople_desc");
                                 String people_desc = (String) getPeople_desc.invoke(cardInfo, new Object[]{});
                                 log(" getPeople_desc:::::::::" + people_desc);
+
+//
+//                                Method getMedia = MblogCardInfoClass.getMethod("getMedia");
+//                                Object media = (Object) getMedia.invoke(cardInfo, new Object[]{});
+//                                log(" getMedia:::::::::" + media);
+//////
+//                                Method getMonitorUrl = MediaDataObjectClass.getMethod("getMonitorUrl");
+//                                String monitorUrl = (String) getMonitorUrl.invoke(cardInfo, new Object[]{});
+//                                log(" getMonitorUrl:::::::::" + monitorUrl);
+//
+//                                Method getMultimediaActionlog = MediaDataObjectClass.getMethod("getMultimediaActionlog");
+//                                String multimediaActionlog = (String) getMultimediaActionlog.invoke(cardInfo, new Object[]{});
+//                                log(" getMultimediaActionlog:::::::::" + multimediaActionlog);
+
 
                             }
 
@@ -570,7 +603,7 @@ public class WeiBo {
                                     log("getTagHidden:::::::::" + tagHidden);
 
                                     Method getType = MBlogTagClass.getMethod("getType");
-                                    int type = (int) getTagHidden.invoke(mBlogTag.get(j), new Object[]{});
+                                    int type = (int) getType.invoke(mBlogTag.get(j), new Object[]{});
                                     log("getType:::::::::" + type);
 
 
@@ -775,6 +808,39 @@ public class WeiBo {
                                 Method getAvatarLarge = JsonUserInfoClass.getMethod("getAvatarLarge");
                                 String avatarLarge = (String) getAvatarLarge.invoke(user, new Object[]{});
                                 log("getAvatarLarge:::::::::" + avatarLarge);
+//                                //图片地址大
+//                                Method getUserId = JsonUserInfoClass.getMethod("getId");
+//                                String userId = (String) getUserId.invoke(user, new Object[]{});
+//                                log("getUserId:::::::::" + userId);
+//  //图片地址大
+//                                Method getGidStr = JsonUserInfoClass.getMethod("getGidStr");
+//                                String gidStr = (String) getGidStr.invoke(user, new Object[]{});
+//                                log("getGidStr:::::::::" + gidStr);
+
+//                                Method getInfo = JsonUserInfoClass.getMethod("getInfo");
+//                                String info = (String) getInfo.invoke(user, new Object[]{});
+//                                log("getInfo:::::::::" + info);
+
+
+//                                //认证类型
+//                                Method getVerifiedType = JsonUserInfoClass.getMethod("getVerifiedType");
+//                                int verifiedType = (int) getVerifiedType.invoke(user, new Object[]{});
+//                                log("getVerifiedType:::::::::" + verifiedType);
+
+//                                //认证理由
+//                                Method getVerifiedReason = JsonUserInfoClass.getMethod("getVerifiedReason");
+//                                String erifiedReason = (String) getVerifiedReason.invoke(user, new Object[]{});
+//                                log("getVerifiedReason:::::::::" + erifiedReason);
+//
+//                                //是否认证
+//                                Method getVerified = JsonUserInfoClass.getMethod("getVerified");
+//                                String verified = (String) getVerified.invoke(user, new Object[]{});
+//                                log("getVerified:::::::::" + verified);
+//
+                                //会员是否过期
+//                                Method isVipCoverOverdue = JsonUserInfoClass.getMethod("isVipCoverOverdue");
+//                                Boolean vipCoverOverdue = (Boolean) isVipCoverOverdue.invoke(user, new Object[]{});
+//                                log("Boolean:::::::::" + vipCoverOverdue);
 
 //
 //                                Method getuRank = JsonUserInfoClass.getMethod("getuRank");
@@ -956,23 +1022,6 @@ public class WeiBo {
 //                            }
 
 
-                            findAndHookMethod("com.sina.weibo.models.Status", lpparam.classLoader, "setMultimedia", List.class, new XC_MethodHook() {
-                                @Override
-                                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                                    super.afterHookedMethod(param);
-                                    List multiMedia = (List) param.args[0];
-                                    log("com.sina.weibo.models.Status===="+multiMedia);
-
-                                    for (int i=0;i<multiMedia.size();i++)
-                                    {
-
-                                    }
-
-
-                                }
-                            });
-
-
                         }
 
 
@@ -1001,6 +1050,8 @@ public class WeiBo {
         });
 
     }
+
+
 
 
 }
